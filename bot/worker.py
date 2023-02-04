@@ -109,7 +109,7 @@ async def dl_link(event):
     org = int(Path(dl).stat().st_size)
     com = int(Path(out).stat().st_size)
     pe = 100 - ((com / org) * 100)
-    per = str(f"{pe:.2f}") + "%"
+    per = f'{str(f"{pe:.2f}")}%'
     eees = dt.now()
     x = dtime
     xx = ts(int((ees - es).seconds) * 1000)
@@ -133,12 +133,11 @@ async def encod(event):
             return
         if not event.media:
             return
-        if hasattr(event.media, "document"):
-            if not event.media.document.mime_type.startswith(
-                ("video", "application/octet-stream")
-            ):
-                return
-        else:
+        if not hasattr(event.media, "document"):
+            return
+        if not event.media.document.mime_type.startswith(
+            ("video", "application/octet-stream")
+        ):
             return
         try:
             oc = event.fwd_from.from_id.user_id
@@ -153,16 +152,17 @@ async def encod(event):
             doc = event.media.document
             if doc.id in list(QUEUE.keys()):
                 return await xxx.edit("`THIS FILE ALREADY IN QUEUE`")
-            name = event.file.name
-            if not name:
-                name = "video_" + dt.now().isoformat("_", "seconds") + ".mp4"
+            name = (
+                event.file.name
+                or "video_" + dt.now().isoformat("_", "seconds") + ".mp4"
+            )
             QUEUE.update({doc.id: [name, doc]})
             return await xxx.edit(f"`Added This File in Queue #{len(QUEUE)}`")
         WORKING.append(1)
         xxx = await event.reply("`Downloading...`")
         s = dt.now()
         ttt = time.time()
-        dir = f"downloads/"
+        dir = "downloads/"
         try:
             if hasattr(event.media, "document"):
                 file = event.media.document
@@ -200,7 +200,7 @@ async def encod(event):
         es = dt.now()
         kk = dl.split("/")[-1]
         aa = kk.split(".")[-1]
-        rr = f"encode"
+        rr = "encode"
         bb = kk.replace(f".{aa}", " compressed.mkv")
         out = f"{rr}/{bb}"
         thum = "thumb.jpg"
@@ -250,7 +250,7 @@ async def encod(event):
         org = int(Path(dl).stat().st_size)
         com = int(Path(out).stat().st_size)
         pe = 100 - ((com / org) * 100)
-        per = str(f"{pe:.2f}") + "%"
+        per = f'{str(f"{pe:.2f}")}%'
         eees = dt.now()
         x = dtime
         xx = ts(int((ees - es).seconds) * 1000)
